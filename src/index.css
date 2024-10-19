@@ -1,0 +1,131 @@
+:root {
+  /* Définit la police de caractères par défaut pour l'ensemble du document */
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  /* Définit l'espacement entre les lignes (hauteur de ligne) */
+  line-height: 1.5;
+
+  /* Définit le poids de la police par défaut (normal) */
+  font-weight: 400;
+
+  /* Précise que le schéma de couleur prend en charge le mode clair et sombre */
+  color-scheme: light dark;
+
+  /* Définit la couleur par défaut du texte */
+  color: rgba(255, 255, 255, 0.87); /* Blanc avec opacité */
+
+  /* Définit la couleur de fond du document */
+  background-color: #242424; /* Un gris foncé */
+
+  /* Empêche la synthèse de police pour un meilleur contrôle des styles de police */
+  font-synthesis: none;
+
+  /* Améliore la lisibilité du texte */
+  text-rendering: optimizeLegibility;
+
+  /* Améliore le lissage des polices sur les navigateurs basés sur WebKit */
+  -webkit-font-smoothing: antialiased;
+
+  /* Améliore le lissage des polices sur macOS */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  /* Définit le poids de la police pour les liens */
+  font-weight: 500; /* Semi-gras */
+
+  /* Définit la couleur des liens */
+  color: #646cff; /* Bleu clair */
+
+  /* Supprime la décoration par défaut des liens (soulignement) */
+  text-decoration: inherit; /* Hérite du style du parent */
+}
+
+a:hover {
+  /* Change la couleur des liens au survol */
+  color: #535bf2; /* Un bleu plus foncé */
+}
+
+body {
+  /* Supprime les marges par défaut */
+  margin: 0;
+
+  /* Utilise Flexbox pour centrer le contenu */
+  display: flex;
+  place-items: center; /* Centre les éléments à la fois horizontalement et verticalement */
+
+  /* Définit une largeur minimale pour le corps */
+  min-width: 320px; /* Largeur minimale pour l'affichage sur mobile */
+
+  /* Définit une hauteur minimale pour le corps */
+  min-height: 100vh; /* Prend toute la hauteur de la fenêtre du navigateur */
+}
+
+h1 {
+  /* Définit la taille de la police pour les titres h1 */
+  font-size: 3.2em; /* Taille importante pour les titres */
+
+  /* Définit l'espacement entre les lignes pour h1 */
+  line-height: 1.1; /* Espacement réduit pour un titre compact */
+}
+
+button {
+  /* Arrondit les coins du bouton */
+  border-radius: 8px;
+
+  /* Définit une bordure transparente par défaut */
+  border: 1px solid transparent;
+
+  /* Ajoute du padding pour l'espacement interne du bouton */
+  padding: 0.6em 1.2em; /* Espacement vertical et horizontal */
+
+  /* Définit la taille de la police pour le bouton */
+  font-size: 1em; /* Taille de police par défaut */
+
+  /* Définit le poids de la police pour le bouton */
+  font-weight: 500; /* Semi-gras */
+
+  /* Hérite la police du parent */
+  font-family: inherit;
+
+  /* Définit la couleur de fond du bouton */
+  background-color: #1a1a1a; /* Un gris foncé */
+
+  /* Change le curseur au survol */
+  cursor: pointer;
+
+  /* Ajoute une transition pour les changements de bordure */
+  transition: border-color 0.25s; /* Durée de 0.25s pour l'animation */
+}
+
+button:hover {
+  /* Change la couleur de la bordure au survol */
+  border-color: #646cff; /* Bordure bleu clair */
+}
+
+button:focus,
+button:focus-visible {
+  /* Ajoute une bordure d'accentuation lorsque le bouton est en focus */
+  outline: 4px auto -webkit-focus-ring-color; /* Couleur de l'anneau de focus */
+}
+
+/* Styles spécifiques pour le mode clair */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Change la couleur du texte pour le mode clair */
+    color: #213547; /* Un bleu-gris foncé */
+
+    /* Change la couleur de fond pour le mode clair */
+    background-color: #ffffff; /* Blanc */
+  }
+
+  a:hover {
+    /* Change la couleur des liens au survol dans le mode clair */
+    color: #747bff; /* Un bleu plus clair au survol */
+  }
+
+  button {
+    /* Change la couleur de fond des boutons dans le mode clair */
+    background-color: #007bff; /* Un gris clair */
+  }
+}

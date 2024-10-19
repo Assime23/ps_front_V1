@@ -1,0 +1,260 @@
+import { useState, useEffect } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import LogoutButton from '../../logoutButton';
+import useAuthUser from '../../../services/useAuthUser';
+import '../../../../public/logo.png'
+function NavbarAgents() {
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const { http } = useAuthUser();
+  const [libelleCaisse, setLibelleCaisse] = useState('');
+
+  // Fonction pour confirmer la descente de la caisse
+  const openConfirmation = () => {
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: "Êtes-vous sûr de vouloir descendre la caisse ?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Oui, descendre',
+      cancelButtonText: 'Annuler',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDescendreCaisse();
+      }
+    });
+  };
+
+  useEffect(() => {
+    const savedLibelle = localStorage.getItem('selectedCaisseLibelle');
+    if (savedLibelle) {
+      setLibelleCaisse(savedLibelle);
+    }
+  }, []);
+
+  const handleDescendreCaisse = async () => {
+    try {
+      const response = await http.post('/descendre-caisse', {}, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      Swal.fire({
+        title: 'Succès',
+        text: response.data.message,
+        icon: 'success',
+      });
+
+      localStorage.removeItem('selectedCaisse');
+      localStorage.removeItem('noteId');
+      localStorage.removeItem('selectedCaisseLibelle');
+      setLibelleCaisse('');
+    } catch (error) {
+      Swal.fire({
+        title: 'Erreur',
+        text: error.response?.data?.error || 'Erreur lors de la descente de la caisse.',
+        icon: 'error',
+      });
+    }
+  };
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  // Les éléments du menu avec leurs routes associées
+  const pages = [
+    { name: 'Tableau de bord', path: '/agent/dashboard' },
+    { name: 'Ma caisse', path: '/ag/ma' },
+    { name: 'Transactions Agents', path: '/ag/transfert-agent' },
+    { name: 'Autres Transfert', path: '/ag/autres-transfert' },
+    { name: 'Credit', path: '/ag/donner-credit' },
+
+    //{ name: 'Mes transferts', path: '/agent/transferts' },
+   // { name: 'Gestion Clients', path: '/agent/gestion-clients' },
+    { name: 'Rétrait de 10%', path: '/ag/retrait' }
+  ];
+
+  const settings = [
+    { name: 'Profile', path: '/ag/profil' },
+    //{ name: 'Account', action: null },
+    { name: 'Descendre Caisse', action: openConfirmation },
+  ];
+
+  return (
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+        <a className="sidebar-brand">
+          <img src="../../../../public/logo.png" alt="Papou Service Logo" className="align-middle" style={{ height: '75px', width: '75px' }} />
+        </a>
+          {/* Libellé de la caisse */}
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+              fontSize: '1rem',
+            }}
+          >
+            {libelleCaisse ? ` ${libelleCaisse}` : 'Aucune caisse sélectionnée'}
+          </Typography>
+
+          {/* Menu version mobile */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="open navigation menu"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              {pages.map((page, index) => (
+                <MenuItem key={index} onClick={handleCloseNavMenu}>
+                  <Link to={page.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Typography>{page.name}</Typography>
+                  </Link>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+
+          {/* Libellé de la caisse pour la version mobile */}
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+              fontSize: '1rem',
+            }}
+          >
+            {libelleCaisse ? ` ${libelleCaisse}` : 'Aucune caisse'}
+          </Typography>
+
+          {/* Menu version desktop */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page, index) => (
+              <Button
+                key={index}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+                component={Link}
+                to={page.path}
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Box>
+
+          {/* Menu utilisateur */}
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+             {settings.map((setting, index) => (
+              setting.path ? (
+                <MenuItem key={index} onClick={handleCloseUserMenu}>
+                  <Link to={setting.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </Link>
+                </MenuItem>
+              ) : (
+                <MenuItem key={index} onClick={setting.action}>
+                  <Typography textAlign="center">{setting.name}</Typography>
+                </MenuItem>
+              )
+            ))}
+              <MenuItem key="logout" onClick={handleCloseUserMenu}>
+                <LogoutButton />
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+}
+
+export default NavbarAgents;

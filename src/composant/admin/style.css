@@ -1,0 +1,168 @@
+/* Wrapper for the whole layout */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Take the full height of the viewport */
+}
+
+/* Fixed navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  
+  z-index: 1000; /* Ensures the navbar is above other content */
+}
+
+/* Footer fixed at the bottom */
+.footer {
+  position: fixed;
+  bottom: 0;
+  
+  z-index: 1000;
+  background-color: #f8f9fa;
+  padding: 10px;
+}
+
+/* Sidebar fixed on the left */
+.sidebar {
+  position: fixed;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  z-index: 999;
+  background-color: #f1f1f1;
+}
+
+/* Content area that takes the remaining space */
+.main-content {
+  display: flex;
+  flex: 1;
+   margin-left: 250px; /* Adjust this to match the width of the sidebar */
+}
+
+.content-area {
+  padding: 20px;
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 60px; /* To ensure content doesn't overlap the footer */
+}
+
+/* When sidebar is hidden */
+.sidebar-hidden {
+  margin-left: 0;
+}
+
+/* Optional media query to handle responsiveness */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%; /* Sidebar takes full width on small screens */
+    position: relative; /* Sidebar is not fixed on small screens */
+    height: auto;
+  }
+
+  .content-area {
+    margin-left: 0;
+  }
+}.sidebar.hidden {
+  display: none;
+}
+
+.sidebar.visible {
+  display: block;
+}
+
+.main.sidebar-hidden {
+  margin-left: 0;
+}
+
+.main.sidebar-visible {
+  margin-left: 150 px; /* Ajustez cette valeur en fonction de la largeur de votre sidebar */
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.main {
+  display: flex;
+}
+
+.container {
+  flex-grow: 1; /* Laisse la section children occuper tout l'espace disponible */
+  padding: 20px; /* Ajoute de l'espace autour du contenu */
+}
+
+footer {
+  width: 100%;
+}
+
+/* Styles supplémentaires pour la réactivité */
+.table-responsive {
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .h3 {
+    font-size: 1.5rem;
+  }
+  .btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+/* src/App.css */
+.sidebar.hidden {
+  display: none;
+}
+
+.sidebar.visible {
+  display: block;
+}
+
+.main.sidebar-hidden {
+  margin-left: 0;
+}
+
+.main.sidebar-visible {
+  margin-left: 150 px; /* Ajustez cette valeur en fonction de la largeur de votre sidebar */
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; /* Assure que la page prend toute la hauteur de la fenêtre */
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Permet à la section principale de s'étendre */
+}
+
+.container {
+  flex-grow: 1; /* Laisse la section children occuper tout l'espace disponible */
+  padding: 20px; /* Ajoute de l'espace autour du contenu */
+}
+
+footer {
+  margin-top: auto; /* Le footer se colle en bas */
+  width: 100%;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.dropdown-menu.show {
+	display: block;
+}

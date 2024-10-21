@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { FaCashRegister, FaExchangeAlt, FaCreditCard, FaUser, FaHandHoldingUsd, FaUndoAlt, FaMoneyCheckAlt } from 'react-icons/fa';  // Importation des icônes

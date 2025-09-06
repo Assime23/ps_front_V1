@@ -13,6 +13,9 @@ fi
 
 echo "✅ Fichiers de build trouvés"
 
+# Créer les répertoires nécessaires pour nginx avec les bonnes permissions
+mkdir -p /tmp/nginx /var/cache/nginx/client_temp /var/cache/nginx/proxy_temp /var/cache/nginx/fastcgi_temp /var/cache/nginx/uwsgi_temp /var/cache/nginx/scgi_temp
+
 # Vérifier la configuration Nginx
 nginx -t
 
@@ -20,11 +23,11 @@ echo "✅ Configuration Nginx valide"
 
 # Afficher les informations de démarrage
 echo "📋 Informations du conteneur:"
-echo "   - Node.js version: $(node --version 2>/dev/null || echo 'Non disponible')"
 echo "   - Nginx version: $(nginx -v 2>&1 | cut -d' ' -f3)"
 echo "   - Utilisateur: $(whoami)"
 echo "   - Répertoire web: /usr/share/nginx/html"
-echo "   - Configuration: /etc/nginx/conf.d/default.conf"
+echo "   - Configuration: /etc/nginx/nginx.conf"
+echo "   - PID file: /tmp/nginx.pid"
 
 # Lister les fichiers principaux
 echo "📁 Fichiers principaux:"

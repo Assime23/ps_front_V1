@@ -30,18 +30,19 @@ RUN apk add --no-cache curl
 # Copier les fichiers construits
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copier la configuration Nginx
+# Copier les configurations Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx-main.conf /etc/nginx/nginx.conf
 
-# Créer un utilisateur non-root
-RUN addgroup -g 1001 -S nginx-user && \
-    adduser -S -D -H -u 1001 -h /var/cache/nginx -s /sbin/nologin -G nginx-user -g nginx-user nginx-user
-
-# Ajuster les permissions
-RUN chown -R nginx-user:nginx-user /usr/share/nginx/html && \
-    chown -R nginx-user:nginx-user /var/cache/nginx && \
-    chown -R nginx-user:nginx-user /var/log/nginx && \
-    chown -R nginx-user:nginx-user /etc/nginx/conf.d
+# Créer les répertoires nécessaires et ajuster les permissions
+RUN mkdir -p /var/cache/nginx /var/log/nginx /var/run && \
+    touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/cache/nginx && \
+    chown -R nginx:nginx /var/log/nginx && \
+    chown -R nginx:nginx /var/run/nginx.pid && \
+    chown -R nginx:nginx /etc/nginx/conf.d && \
+    chmod -R 755 /var/cache/nginx && \
+    chmod -R 755 /var/log/nginx
 
 # Créer un script de démarrage
 COPY docker-entrypoint.sh /docker-entrypoint.sh
@@ -49,9 +50,6 @@ RUN chmod +x /docker-entrypoint.sh
 
 # Exposer le port
 EXPOSE 80
-
-# Utiliser l'utilisateur non-root
-USER nginx-user
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \

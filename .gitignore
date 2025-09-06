@@ -22,3 +22,31 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Docker et déploiement
+backups/
+monitoring/
+*.backup
+*.bak
+
+# Variables d'environnement sensibles (garder .env.production pour déploiement)
+.env.local
+.env.development
+.env.test
+
+# Fichiers de build Docker
+.dockerignore
+
+# Logs de production
+*.log.*
+access.log
+error.log
+
+# Certificats SSL (si stockés localement)
+*.pem
+*.key
+*.crt
+
+# Fichiers temporaires de déploiement
+tmp/
+temp/

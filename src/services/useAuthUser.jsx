@@ -18,7 +18,7 @@ const useAuthUser = () => {
 
     // Créer une instance Axios
     const http = axios.create({
-        baseURL: "https://api1.psmyservices.com/api/health",
+        baseURL: "https://api1.psmyservices.com/api",
         headers: {
             "Content-type": "application/json",
         }

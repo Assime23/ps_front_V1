@@ -22,14 +22,13 @@ cd ps_front
 # Rendre les scripts exécutables
 chmod +x *.sh
 
-# Option 1: Déploiement avec gestion automatique des permissions
-./deploy-sudo.sh deploy
+# Option recommandée: Déploiement simple
+./deploy-simple.sh deploy
 
-# Option 2: Déploiement direct (si vous avez les permissions Docker)
-./deploy.sh deploy
-
-# Option 3: Test de build local sans Docker
-./test-build.sh
+# Options avancées (si nécessaire)
+./deploy-sudo.sh deploy    # Gestion automatique des permissions
+./deploy.sh deploy         # Script complet avec monitoring
+./test-build.sh           # Test de build local sans Docker
 ```
 
 ## 📁 Fichiers de Configuration
@@ -62,10 +61,20 @@ Configuration Nginx avancée:
 
 ## 🔧 Commandes Disponibles
 
-### Scripts de déploiement
+### Configuration simple (recommandée)
+```bash
+# Script de déploiement simplifié
+./deploy-simple.sh deploy     # Déploiement complet
+./deploy-simple.sh restart    # Redémarrage
+./deploy-simple.sh logs       # Voir les logs
+./deploy-simple.sh status     # État des conteneurs
+./deploy-simple.sh cleanup    # Nettoyage
+```
+
+### Configuration avancée (optionnelle)
 ```bash
 # Déploiement avec gestion automatique des permissions
-./deploy-sudo.sh deploy    # Recommandé
+./deploy-sudo.sh deploy    # Recommandé pour serveurs
 ./deploy-sudo.sh restart
 ./deploy-sudo.sh logs
 ./deploy-sudo.sh status

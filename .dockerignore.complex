@@ -1,0 +1,91 @@
+# Fichier .dockerignore pour optimiser les builds Docker
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+dist/
+build/
+
+# Environment files (sauf .env.production qui sera copié)
+.env.local
+.env.development
+.env.test
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Deployment scripts (exclure les scripts de déploiement mais garder docker-entrypoint.sh)
+deploy.sh
+deploy-sudo.sh
+update.sh
+monitor.sh
+test-build.sh
+
+# Documentation
+README.md
+docs/
+*.md
+
+# Test files
+coverage/
+.nyc_output/
+*.test.js
+*.spec.js
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Linting
+.eslintcache
+
+# Package managers
+.npm/
+.yarn/
+yarn.lock
+package-lock.json
+
+# Backups
+backups/
+*.backup
+*.bak
+
+# Development tools
+.storybook/
+cypress/
+.cypress/

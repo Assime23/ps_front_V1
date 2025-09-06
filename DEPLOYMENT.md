@@ -19,11 +19,17 @@ cd ps_front
 
 ### 2. Déploiement automatique
 ```bash
-# Rendre le script exécutable
-chmod +x deploy.sh
+# Rendre les scripts exécutables
+chmod +x *.sh
 
-# Déployer l'application
+# Option 1: Déploiement avec gestion automatique des permissions
+./deploy-sudo.sh deploy
+
+# Option 2: Déploiement direct (si vous avez les permissions Docker)
 ./deploy.sh deploy
+
+# Option 3: Test de build local sans Docker
+./test-build.sh
 ```
 
 ## 📁 Fichiers de Configuration
@@ -56,28 +62,27 @@ Configuration Nginx avancée:
 
 ## 🔧 Commandes Disponibles
 
+### Scripts de déploiement
 ```bash
-# Déploiement complet
+# Déploiement avec gestion automatique des permissions
+./deploy-sudo.sh deploy    # Recommandé
+./deploy-sudo.sh restart
+./deploy-sudo.sh logs
+./deploy-sudo.sh status
+./deploy-sudo.sh info      # Informations système
+
+# Déploiement direct (nécessite permissions Docker)
 ./deploy.sh deploy
-
-# Redémarrage des services
 ./deploy.sh restart
-
-# Voir les logs
 ./deploy.sh logs
-./deploy.sh logs -f  # Suivi en temps réel
-
-# Vérifier l'état
+./deploy.sh logs -f        # Suivi en temps réel
 ./deploy.sh status
-
-# Build uniquement
 ./deploy.sh build
-
-# Nettoyage du système
 ./deploy.sh cleanup
-
-# Aide
 ./deploy.sh help
+
+# Test de build local (sans Docker)
+./test-build.sh            # Vérifie que le build fonctionne
 ```
 
 ## 🌐 URLs et Accès
@@ -115,16 +120,37 @@ docker-compose exec frontend tail -f /var/log/nginx/ps_front_error.log
 
 ## 🚨 Résolution de Problèmes
 
+### Problème: "vite: not found" lors du build
+**Solution**: Corrigé dans le Dockerfile - nous installons maintenant toutes les dépendances.
+```bash
+# Test local pour vérifier le build
+./test-build.sh
+
+# Si le test fonctionne, redéployer avec Docker
+./deploy-sudo.sh deploy
+```
+
 ### L'application ne démarre pas
 ```bash
 # Vérifier les logs
-./deploy.sh logs
+./deploy-sudo.sh logs
 
 # Reconstruire l'image
-./deploy.sh build
+./deploy-sudo.sh build
 
 # Redéployer complètement
-./deploy.sh deploy
+./deploy-sudo.sh deploy
+```
+
+### Problèmes de permissions Docker
+```bash
+# Utiliser le script avec gestion automatique
+./deploy-sudo.sh info      # Vérifier les permissions
+./deploy-sudo.sh deploy    # Utilise sudo si nécessaire
+
+# Ou ajouter votre utilisateur au groupe docker
+sudo usermod -aG docker $USER
+# Puis redémarrer votre session
 ```
 
 ### Problèmes de réseau

@@ -1,42 +1,38 @@
-import  { useState, useEffect } from 'react';
-import useAuthUser from '../services/useAuthUser';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import '../css/Login.css';
 
 const Login = () => {
-    const { login } = useAuthUser();
+    const { login, isLoading, error, clearAuthError, user } = useAuth();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errMsg, setErrMsg] = useState('');
-    const [isLoading, setIsLoading] = useState(false);  // État pour le chargement
 
     useEffect(() => {
-        setErrMsg('');  // Réinitialiser le message d'erreur si l'email ou le mot de passe change
-    }, [email, password]);
+        clearAuthError(); // Réinitialiser les erreurs au changement des champs
+    }, [email, password, clearAuthError]);
+
+    // Redirection automatique si l'utilisateur est déjà connecté
+    useEffect(() => {
+        if (user) {
+            const redirectPath = user.type === 'admin' ? '/ad' : '/ag';
+            navigate(redirectPath, { replace: true });
+        }
+    }, [user, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsLoading(true);  // Commence le chargement
+        
         try {
-            await login({ email, password });
-
-            // Ajout d'un délai pour simuler le temps d'enregistrement dans le localStorage
-         /*   setTimeout(() => {
-                navigate('/');  // Rediriger après l'enregistrement réussi dans le localStorage
-            }, 100);  // Délai d'attente (ajustez la durée selon vos besoins)
-            */
+            const result = await login({ email, password });
+            
+            if (result.type === 'auth/login/fulfilled') {
+                // La redirection sera gérée par l'effet ci-dessus
+            }
         } catch (err) {
             console.error('Login error in handleSubmit:', err);
-            setIsLoading(false);  // Arrête le chargement en cas d'erreur
-            if (!err.response) {
-                setErrMsg('Le serveur backend ne fonctionne pas');
-            } else if (err.response.status === 400) {
-                setErrMsg('Email ou mot de passe manquant');
-            } else if (err.response.status === 401) {
-                setErrMsg('Non autorisé. Vérifiez vos identifiants');
-            } else {
-                setErrMsg('Échec de la connexion');
-            }
         }
     };
 
@@ -58,7 +54,7 @@ const Login = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            disabled={isLoading}  // Désactiver les champs pendant le chargement
+                            disabled={isLoading}
                         />
                     </div>
                     <div>
@@ -69,14 +65,14 @@ const Login = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            disabled={isLoading}  // Désactiver les champs pendant le chargement
+                            disabled={isLoading}
                         />
                     </div>
                     <button type="submit" disabled={isLoading}>
                         {isLoading ? 'Connexion en cours...' : 'Se connecter'}
                     </button>
                 </form>
-                {errMsg && <p className="errmsg">{errMsg}</p>}
+                {error && <p className="errmsg">{error}</p>}
             </div>
         </section>
     );

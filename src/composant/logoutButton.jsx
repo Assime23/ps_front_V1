@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; // Import de SweetAlert2
-import useAuthUser from '../services/useAuthUser';
+import { useAuth } from '../hooks/useAuth';
 
 const LogoutButton = () => {
-  const { logout } = useAuthUser();
+  const { logout, isLoading } = useAuth();
   const navigate = useNavigate();
 
   // Fonction pour gérer la déconnexion après confirmation
@@ -25,6 +25,8 @@ const LogoutButton = () => {
   const openLogoutConfirmation = (event) => {
     event.preventDefault(); // Empêche le comportement par défaut du lien
 
+    if (isLoading) return; // Empêche les clics multiples pendant le chargement
+
     Swal.fire({
       title: 'Êtes-vous sûr ?',
       text: 'de vouloir vous déconnecter ?',
@@ -43,8 +45,13 @@ const LogoutButton = () => {
 
   return (
     <>
-      <a href="#" onClick={openLogoutConfirmation} className="dropdown-item">
-        Déconnexion
+      <a 
+        href="#" 
+        onClick={openLogoutConfirmation} 
+        className="dropdown-item"
+        style={{ opacity: isLoading ? 0.6 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}
+      >
+        {isLoading ? 'Déconnexion...' : 'Déconnexion'}
       </a>
     </>
   );

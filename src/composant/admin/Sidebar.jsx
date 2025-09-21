@@ -1,15 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
-import UserContext from "../../services/UserContext";
-import { useContext } from 'react';
 import './style.css';
-function Sidebar({ visible }) {
-    const { UserType, setUserType } = useContext(UserContext);
-    const location = useLocation(); // Utiliser useLocation pour obtenir l'URL actuelle
 
-   /* const handleSelectChange = (event) => {
-        setUserType(event.target.value);
-    };
-*/
+function Sidebar({ visible }) {
+    const location = useLocation();
+
     return (
         <nav id="sidebar" className={`sidebar js-sidebar position-fixed bg-light ${visible ? 'visible' : 'hidden'}`} style={{ width: '250px' }}>
             <div className="sidebar-content js-simplebar">
@@ -70,6 +64,3 @@ function Sidebar({ visible }) {
 }
 
 export default Sidebar;
-
-
-

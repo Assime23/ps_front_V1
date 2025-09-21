@@ -1,6 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import RequireAuth from '../services/requireAuth';
-import TYPE from '../constants/TYPE';
 import Template from '../composant/agent/home/Template';
 import SelectCaisse from '../pages/SelectCaisse';
 import PageError from '../pages/pageError';
@@ -15,7 +13,6 @@ import HomePage from '../pages/home';
 
 const AgentRoutes = () => (
   <Routes>
-    <Route element={<RequireAuth allowedTypes={[TYPE.agent]} />}>
     <Route path="/select-caisse" element={<Template><SelectCaisse /></Template>} />
     <Route path="/" element={<Template><HomePage /></Template>} />
     <Route path="/ma" element={<Template><SelectCaisse /></Template>} />
@@ -26,11 +23,8 @@ const AgentRoutes = () => (
     <Route path="/retrait" element={<Template><Retrait /></Template>} />
     <Route path="/creecredit" element={<Template><CreerCredit /></Template>} />
     <Route path="/profil" element={<Template><UserProfile /></Template>} />
-
     <Route path="*" element={<Template><PageError /></Template>} />
-
     {/* Ajoutez plus de routes agent ici */}
-    </Route>
   </Routes>
 );
 

@@ -14,7 +14,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import LogoutButton from '../logoutButton';
 import DescendreCaisseButton from '../DescendreCaisseButton';// Import du nouveau composant
-import '../../../public/logo.png';
 
 function NavbarAgents() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -62,7 +61,7 @@ function NavbarAgents() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <a className="sidebar-brand">
-            <img src="../../../../public/logo.png" alt="Papou Service Logo" className="align-middle" style={{ height: '75px', width: '75px' }} />
+            <img src="/logo.png" alt="Papou Service Logo" className="align-middle" style={{ height: '75px', width: '75px' }} />
           </a>
 
           <Typography

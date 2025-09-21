@@ -14,7 +14,7 @@ function Sidebar({ visible }) {
         <nav id="sidebar" className={`sidebar js-sidebar position-fixed bg-light ${visible ? 'visible' : 'hidden'}`} style={{ width: '250px' }}>
             <div className="sidebar-content js-simplebar">
                 <Link className="sidebar-brand" to="/#">
-                    <img src="/dashboard/img/logo.png" alt="Papou Service Logo" className="align-middle" style={{ height: 150, width: 150 }} />
+                    <img src="/logo.png" alt="Papou Service Logo" className="align-middle" style={{ height: 150, width: 150 }} />
                 </Link>
                 <ul className="sidebar-nav">
 

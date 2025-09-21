@@ -1,6 +1,5 @@
 import  { useState, useEffect } from 'react';
 import useAuthUser from '../services/useAuthUser';
-import logo from '../../public/logo.png'
 import '../css/Login.css';
 
 const Login = () => {
@@ -46,7 +45,7 @@ const Login = () => {
             <div className="login-container">
                 <form onSubmit={handleSubmit}>
                     <div className="logo-container">
-                        <img src={logo} alt="Logo de l'entreprise" className="logo" />
+                        <img src="/logo.png" alt="Logo de l'entreprise" className="logo" />
                     </div>
                     <h2>Bienvenue</h2>
                     <p>Veuillez vous connecter pour continuer</p>

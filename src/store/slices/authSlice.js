@@ -10,6 +10,7 @@ const initialState = {
   error: null,
   caisse: null,
   abilities: [],
+  status: 'idle', // 'idle' | 'loading' | 'succeeded'
 };
 
 // Thunks asynchrones pour les actions d'authentification
@@ -102,6 +103,7 @@ const authSlice = createSlice({
     },
     // Action pour initialiser l'état depuis le localStorage
     initializeAuth: (state) => {
+      state.status = 'loading';
       const token = localStorage.getItem('token');
       const user = localStorage.getItem('user');
       const tokenExpiration = localStorage.getItem('token_expiration');
@@ -133,6 +135,7 @@ const authSlice = createSlice({
           localStorage.removeItem('noteId');
         }
       }
+      state.status = 'succeeded';
     },
   },
   extraReducers: (builder) => {
@@ -234,6 +237,7 @@ export const { clearError, setCaisse, setAbilities, initializeAuth } = authSlice
 export const selectAuth = (state) => state.auth;
 export const selectUser = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectAuthStatus = (state) => state.auth.status;
 export const selectIsLoading = (state) => state.auth.isLoading;
 export const selectError = (state) => state.auth.error;
 export const selectCaisse = (state) => state.auth.caisse;

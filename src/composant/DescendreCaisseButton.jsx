@@ -63,6 +63,10 @@ const DescendreCaisseButton = ({ setLibelleCaisse }) => {
         localStorage.removeItem('selectedCaisse');
         localStorage.removeItem('noteId');
         localStorage.removeItem('selectedCaisseLibelle');
+        
+        // Déclencher l'événement de changement de caisse
+        window.dispatchEvent(new Event('caisseChanged'));
+        
         setLibelleCaisse('');
         handleClose();
       }

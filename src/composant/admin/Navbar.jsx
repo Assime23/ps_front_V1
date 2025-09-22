@@ -25,6 +25,20 @@ function NavbarAgents() {
     if (savedLibelle) {
       setLibelleCaisse(savedLibelle);
     }
+
+    // Écouter les changements de caisse
+    const handleCaisseChange = () => {
+      const newLibelle = localStorage.getItem('selectedCaisseLibelle');
+      setLibelleCaisse(newLibelle || '');
+    };
+
+    // Ajouter l'écouteur d'événement
+    window.addEventListener('caisseChanged', handleCaisseChange);
+    
+    // Nettoyer l'écouteur au démontage
+    return () => {
+      window.removeEventListener('caisseChanged', handleCaisseChange);
+    };
   }, []);
 
   const handleOpenNavMenu = (event) => {

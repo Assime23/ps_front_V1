@@ -76,6 +76,9 @@ const SelectCaisse = () => {
           localStorage.setItem('selectedCaisseLibelle', caisseLibelle);
           localStorage.setItem('noteId', response.data.note_id);
 
+          // Déclencher l'événement de changement de caisse
+          window.dispatchEvent(new Event('caisseChanged'));
+
           Swal.fire({
             title: 'Succès!',
             text: `Caisse sélectionnée avec succès : ${caisseLibelle}`,

@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
-import Login from '../pages/Login';
 import Template from '../composant/admin/Template';
-import HomePage from '../pages/home';
+import AdminDashboard from '../pages/admin/AdminDashboard';
 import UserProfile from '../pages/profil/userProfile';
 import UsersCrud from '../composant/admin/personnel/personnelTable';
 import CaisseCrud from '../composant/admin/personnel/caisse';
@@ -11,8 +10,8 @@ import ProfilsAgents from '../pages/admin/ProfilsAgents';
 
 const AdminRoutes = () => (
   <Routes>
-    <Route path="dashboard" element={<Login />} />
-    <Route path="/" element={<Template><HomePage /></Template>} />
+    <Route path="/" element={<Template><AdminDashboard /></Template>} />
+    <Route path="/dashboard" element={<Template><AdminDashboard /></Template>} />
     <Route path="/profil" element={<Template><UserProfile /></Template>} />
     <Route path="/users" element={<Template><UsersCrud /></Template>} />
     <Route path="/caisses" element={<Template><CaisseCrud /></Template>} />

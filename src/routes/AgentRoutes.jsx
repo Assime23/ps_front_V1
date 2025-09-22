@@ -9,14 +9,15 @@ import RembourserCredit from '../pages/rembourserCredit';
 import Retrait from '../pages/retrait';
 import UserProfile from '../pages/profil/userProfile';
 import CreerCredit from '../pages/creerCredit';
-import HomePage from '../pages/home';
+import AgentDashboard from '../pages/agent/AgentDashboard';
 import BilanAgents from '../pages/admin/BilanAgents';
 import ProfilCompletAgent from '../pages/admin/ProfilCompletAgent';
 
 const AgentRoutes = () => (
   <Routes>
     {/* Page d'accueil agent (accessible via /ag/ ) */}
-    <Route index element={<Template><HomePage /></Template>} />
+    <Route index element={<Template><AgentDashboard /></Template>} />
+    <Route path="dashboard" element={<Template><AgentDashboard /></Template>} />
     <Route path="select-caisse" element={<Template><SelectCaisse /></Template>} />
     <Route path="ma" element={<Template><SelectCaisse /></Template>} />
     <Route path="transfert-agent" element={<Template><TransferAgent /></Template>} />

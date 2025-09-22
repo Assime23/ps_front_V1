@@ -58,9 +58,10 @@ function NavbarAgents() {
   };
 
   const pages = [
-    { name: 'Tableau de bord', path: '/agent/dashboard' },
+    { name: 'Tableau de bord', path: '/ad/' },
     { name: 'Gestion du personnel', path: '/ad/users' },
-    { name: 'Gestion des  Caisses', path: '/ad/caisses' },
+    { name: 'Gestion des Caisses', path: '/ad/caisses' },
+    { name: 'Bilan des Agents', path: '/ad/bilan-agents' },
    /* { name: 'Autres Transfert', path: '/ag/autres-transfert' },
     { name: 'Credit', path: '/ag/donner-credit' },
     { name: 'Rétrait de 10%', path: '/ag/retrait' }*/

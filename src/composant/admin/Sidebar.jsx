@@ -55,6 +55,18 @@ function Sidebar({ visible }) {
                         </Link>
                     </li>
 
+                    <li className={`sidebar-item ${location.pathname === '/bilan-agents' ? 'active' : ''}`}>
+                        <Link className="sidebar-link" to="/bilan-agents">
+                            <i className="align-middle" data-feather="pie-chart"></i> <span className="align-middle">Bilan des Agents</span>
+                        </Link>
+                    </li>
+
+                    <li className={`sidebar-item ${location.pathname.startsWith('/profil') ? 'active' : ''}`}>
+                        <Link className="sidebar-link" to="/profils-agents">
+                            <i className="align-middle" data-feather="user-check"></i> <span className="align-middle">Profils Agents</span>
+                        </Link>
+                    </li>
+
                 </ul>
                 <div className="sidebar-cta">
                 </div>

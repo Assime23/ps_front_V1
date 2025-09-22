@@ -51,3 +51,5 @@ error.log
 tmp/
 temp/
 *.sh
+*.yaml
+*.yml

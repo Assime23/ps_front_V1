@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom'; // Importer Link depuis react-router-dom
 
 function Footer() {
-  // Définir les styles pour le footer
   const footerStyle = {
     backgroundColor: '#1976d2', // Couleur de fond
     color: 'white', // Couleur du texte
-    padding: '5px 0', // Réduire l'espacement vertical
-    position: 'relative', // Pour éviter les problèmes de positionnement
-    bottom: 0, // Pour que le footer reste en bas si nécessaire
-    width: '100%', // S'assurer que le footer prend toute la largeur
+    padding: '10px 0', // Ajuster l'espacement vertical
+    position: 'fixed', // Fixer le footer en bas de l'écran
+    bottom: 0, // Coller au bas de l'écran
+    width: '100%', // Prendre toute la largeur
+    zIndex: 1000, // S'assurer qu'il reste au-dessus du contenu
     fontSize: '12px', // Taille de police plus petite
   };
 

@@ -6,19 +6,24 @@ function Template({ children }) {
   return (
     <div className="d-flex flex-column vh-100">
       {/* Navbar en haut */}
-      <NavbarAgents />
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }}>
+        <NavbarAgents />
+      </div>
 
       {/* Contenu principal */}
-      <div className="flex-grow-1 container-fluid p-3 overflow-auto" style={{
+      <div className="flex-grow-1 container-fluid p-3" style={{
         paddingTop: '64px', // Ajuster selon la hauteur de votre navbar
-        margin: '0 auto',
+        marginTop: '64px', // Pour ne pas que le contenu chevauche la navbar
+        overflowY: 'auto', // Permettre le défilement du contenu sans affecter le footer
         maxWidth: '1200px', // Limite la largeur max sur les grands écrans
       }}>
         {children}
       </div>
 
       {/* Footer en bas */}
-      <Footer />
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000 }}>
+        <Footer />
+      </div>
     </div>
   );
 }

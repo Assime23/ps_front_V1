@@ -6,6 +6,15 @@ import useAuthUser from '../services/useAuthUser';
 const TransferAgent = () => {
   const { http, token } = useAuthUser();
 
+  // Fonction utilitaire pour formater les montants en F CFA
+  const formatCurrency = (value) => {
+    if (value === null || value === undefined) return 'N/A';
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'XOF' 
+    }).format(value);
+  };
+
   const [agents, setAgents] = useState([]);
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [montant, setMontant] = useState('');
@@ -45,7 +54,7 @@ const TransferAgent = () => {
     // Utilisation de SweetAlert pour la confirmation
     Swal.fire({
       title: 'Confirmez-vous ce transfert ?',
-      text: `Vous allez transférer ${montant} à ${selectedAgent.name}`,
+      text: `Vous allez transférer ${formatCurrency(montant)} à ${selectedAgent.name}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui, transférer',
@@ -75,7 +84,7 @@ const TransferAgent = () => {
         }
       );
 
-      Swal.fire('Succès', `Transfert de ${montant} effectué avec succès.`, 'success');
+      Swal.fire('Succès', `Transfert de ${formatCurrency(montant)} effectué avec succès.`, 'success');
       setMontant('');
       setDescription('');
       setSelectedAgent(null);

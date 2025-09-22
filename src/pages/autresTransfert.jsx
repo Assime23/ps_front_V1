@@ -5,6 +5,15 @@ import useAuthUser from '../services/useAuthUser';
 
 const AutresTransfert = () => {
   const { http, token } = useAuthUser();
+
+  // Fonction utilitaire pour formater les montants en F CFA
+  const formatCurrency = (value) => {
+    if (value === null || value === undefined) return 'N/A';
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'XOF' 
+    }).format(value);
+  };
   const [montant, setMontant] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
@@ -76,7 +85,7 @@ const AutresTransfert = () => {
 
     Swal.fire({
       title: 'Confirmez-vous ce transfert ?',
-      text: `Vous allez ${type === 'envoye' ? 'envoyer' : 'recevoir'} ${montant}.`,
+      text: `Vous allez ${type === 'envoye' ? 'envoyer' : 'recevoir'} ${formatCurrency(montant)}.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui, transférer',
@@ -104,7 +113,7 @@ const AutresTransfert = () => {
         }
       );
 
-      Swal.fire('Succès', `Transfert de ${montant} effectué avec succès.`, 'success');
+      Swal.fire('Succès', `Transfert de ${formatCurrency(montant)} effectué avec succès.`, 'success');
       setMontant('');
       setDescription('');
       setShowModal(false); // Fermer le modal
@@ -207,7 +216,7 @@ const AutresTransfert = () => {
                   <strong>Type :</strong> {transfert.type === 'envoye' ? 'Envoyé' : 'Reçu'}
                 </div>
                 <div>
-                  <strong>Montant :</strong> {transfert.montant} €
+                  <strong>Montant :</strong> {formatCurrency(transfert.montant)}
                   <br />
                   <strong>Description :</strong> {transfert.description || 'N/A'}
                 </div>

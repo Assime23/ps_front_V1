@@ -1,9 +1,27 @@
 import { useState, useEffect } from 'react';
-import { Container, Form, ListGroup, Alert, InputGroup } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
+import { 
+  Card, 
+  CardContent, 
+  Typography, 
+  TextField, 
+  List, 
+  ListItem, 
+  ListItemButton, 
+  ListItemText, 
+  Box,
+  Chip,
+  Grid,
+  Paper,
+  IconButton,
+  InputAdornment,
+  Divider
+} from '@mui/material';
+import { Search, AccountBalance, Info, TrendingUp, Schedule, DateRange } from '@mui/icons-material';
 import useAuthUser from '../services/useAuthUser';
-import { useNavigate } from 'react-router-dom'; // Pour la redirection
-import Swal from 'sweetalert2'; // SweetAlert2 pour les alertes
-import 'sweetalert2/dist/sweetalert2.min.css'; // Les styles de SweetAlert2
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const SelectCaisse = () => {
   const [caisses, setCaisses] = useState([]);
@@ -111,75 +129,282 @@ const SelectCaisse = () => {
     });
   };
 
+  // Fonction utilitaire pour formater les montants en F CFA
+  const formatCurrency = (value) => {
+    if (value === null || value === undefined) return 'N/A';
+    // Formater le nombre sans symbole monétaire puis ajouter "F CFA"
+    const formattedNumber = new Intl.NumberFormat('fr-FR', { 
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+    return `${formattedNumber} F CFA`;
+  };
+
+  // Fonction pour formater la date avec l'heure
+  const formatDateTime = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return {
+      date: date.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long', 
+        day: 'numeric'
+      }),
+      time: date.toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      })
+    };
+  };
+
   // Si une caisse active est présente, afficher ses informations
   if (activeCaisse) {
+    const dateTime = formatDateTime(activeCaisse.date_monte);
+    
     return (
-      <Container className="mt-5 d-flex justify-content-center">
-        <div className="w-md-100 w-md-75 w-lg-50">
-          <h1 className="text-center mb-4">Informations sur la Caisse Active</h1>
-          <Alert variant="info">
-            <h4>{activeCaisse.libelle}</h4>
-            <p><strong>Stock Monté Caisse :</strong> {activeCaisse.stock_monte_caisse} FCFA</p>
-            <p><strong>Liquidité Montée :</strong> {activeCaisse.liquidite_monte} FCFA</p>
-            <p><strong>Stock MP 1 :</strong> {activeCaisse.stock_monte_mp_1} FCFA</p>
-            <p><strong>Stock MP 2 :</strong> {activeCaisse.stock_monte_mp_2} FCFA</p>
-            <p><strong>Stock MP 3 :</strong> {activeCaisse.stock_monte_mp_3} FCFA</p>
-            <p><strong>Stock MP 4 :</strong> {activeCaisse.stock_monte_mp_4} FCFA</p>
-            <p><strong>Somme retrait 10% :</strong> {activeCaisse.somme_retrait} FCFA</p>
-            <p><strong>Stock Transfert Agent :</strong> {activeCaisse.somme_transfert} FCFA</p>
-            <p><strong>Stock Autres Transfert :</strong> {activeCaisse.somme_autres_transfert} FCFA</p>
-            <p><strong>Stock  Transfert Recu :</strong> {activeCaisse.somme_transfert_recu} FCFA</p>
-            <p><strong>Somme credit recu :</strong> {activeCaisse.somme_credit_recu} FCFA</p>
-            <p><strong>Somme credit :</strong> {activeCaisse.somme_credit} FCFA</p>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Box textAlign="center" mb={4}>
 
-            <p><strong>Date Montée :</strong> {new Date(activeCaisse.date_monte).toLocaleDateString()}</p>
-          </Alert>
-        </div>
+          <Chip 
+            label={activeCaisse.libelle} 
+            color="primary" 
+            size="large"
+            sx={{ fontSize: '1.1rem', py: 2, mb: 2 }}
+          />
+          
+          {/* Date et heure de montée en haut */}
+          <Card elevation={2} sx={{ mb: 3, backgroundColor: 'primary.main', color: 'white' }}>
+            <CardContent sx={{ py: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 3, flexWrap: 'wrap' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <DateRange />
+                  <Typography variant="h6" fontWeight="bold">
+                    {dateTime.date}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Schedule />
+                  <Typography variant="h6" fontWeight="bold">
+                    {dateTime.time}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+
+        <Grid container spacing={3}>
+          {/* Informations principales */}
+          <Grid item xs={12} md={6}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom color="primary">
+                  <TrendingUp sx={{ mr: 1 }} />
+                  Stocks Montés
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Stock Monté Caisse:</Typography>
+                    <Chip label={formatCurrency(activeCaisse.stock_monte_caisse)} color="primary" />
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Liquidité Montée:</Typography>
+                    <Chip label={formatCurrency(activeCaisse.liquidite_monte)} color="info" />
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Stocks MP Montés */}
+          <Grid item xs={12} md={6}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Mobile Payment
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  {[1, 2, 3, 4].map((mp) => (
+                    <Box key={mp} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="body1">Stock MP {mp}:</Typography>
+                      <Chip 
+                        label={formatCurrency(activeCaisse[`stock_monte_mp_${mp}`])} 
+                        variant="outlined" 
+                        size="small"
+                        color="primary"
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Transactions et Transferts */}
+          <Grid item xs={12}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Transactions
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Somme Retrait 10%:</Typography>
+                    <Chip 
+                      label={formatCurrency(activeCaisse.somme_retrait)} 
+                      variant="outlined" 
+                      size="small"
+                      color={activeCaisse.somme_retrait ? "primary" : "default"}
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Somme Transfert Agent envoyé:</Typography>
+                    <Chip 
+                      label={formatCurrency(activeCaisse.somme_transfert)} 
+                      variant="outlined" 
+                      size="small"
+                      color={activeCaisse.somme_transfert ? "primary" : "default"}
+                    />
+                   </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Somme Transfert Agent Reçu:</Typography>
+                    <Chip 
+                      label={formatCurrency(activeCaisse.somme_transfert_recu)} 
+                      variant="outlined" 
+                      size="small"
+                      color={activeCaisse.somme_transfert_recu ? "primary" : "default"}
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Autres Transferts:</Typography>
+                    <Chip 
+                      label={formatCurrency(activeCaisse.somme_autres_transfert)} 
+                      variant="outlined" 
+                      size="small"
+                      color={activeCaisse.somme_autres_transfert ? "primary" : "default"}
+                    />
+                  </Box>
+
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Autres Transferts Recu:</Typography>
+                    <Chip 
+                      label={formatCurrency(activeCaisse.somme_autres_transfert_recu)} 
+                      variant="outlined" 
+                      size="small"
+                      color={activeCaisse.somme_autres_transfert_recu ? "primary" : "default"}
+                    />
+                       </Box>
+
+     
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Somme Crédit Reçu:</Typography>
+                    <Chip 
+                      label={formatCurrency(activeCaisse.somme_credit_recu)} 
+                      variant="outlined" 
+                      size="small"
+                      color={activeCaisse.somme_credit_recu ? "primary" : "default"}
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="body1">Somme Crédit donné:</Typography>
+                    <Chip 
+                      label={formatCurrency(activeCaisse.somme_credit)} 
+                      variant="outlined" 
+                      size="small"
+                      color={activeCaisse.somme_credit ? "primary" : "default"}
+                    />
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
     );
   }
 
-  // Si aucune caisse active, rediriger vers la sélection de caisse
+  // Si aucune caisse active, afficher la sélection de caisse
   return (
-    <Container className="mt-5 d-flex justify-content-center">
-      <div className="w-md-100 w-md-75 w-lg-50">
-        <h1 className="text-center mb-4">Sélectionner une Caisse</h1>
+    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Box textAlign="center" mb={4}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          <Search sx={{ mr: 2, verticalAlign: 'middle' }} />
+          Sélectionner une Caisse
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Recherchez et sélectionnez votre caisse de travail
+        </Typography>
+      </Box>
 
-        <InputGroup className="mb-3">
-          <Form.Control
-            type="text"
-            placeholder="Rechercher une caisse par libellé"
+      <Card elevation={3} sx={{ mb: 3 }}>
+        <CardContent>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Rechercher une caisse par libellé..."
             value={libelle}
             onChange={(e) => setLibelle(e.target.value)}
-            className="shadow-sm"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search color="action" />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 2 }}
           />
-        </InputGroup>
 
-        {caisses.length > 0 ? (
-          <ListGroup>
-            {caisses.map((caisse) => (
-              <ListGroup.Item
-                key={caisse.id}
-                action
-                onClick={() => selectCaisse(caisse.id, caisse.libelle)}
-                className="d-flex justify-content-between align-items-center list-group-item-action"
-              >
-                <span className="fw-bold">{caisse.libelle}</span>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        ) : (
-          <Alert variant="warning" className="text-center">
-            Aucune caisse disponible pour le moment.
-          </Alert>
-        )}
+          {caisses.length > 0 ? (
+            <Box>
+              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                <AccountBalance sx={{ mr: 1 }} />
+                Caisses disponibles ({caisses.length})
+              </Typography>
+              <List>
+                {caisses.map((caisse) => (
+                  <ListItem key={caisse.id} disablePadding>
+                    <ListItemButton
+                      onClick={() => selectCaisse(caisse.id, caisse.libelle)}
+                      sx={{
+                        borderRadius: 2,
+                        mb: 1,
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        '&:hover': {
+                          backgroundColor: 'primary.light',
+                          borderColor: 'primary.main',
+                        }
+                      }}
+                    >
+                      <AccountBalance sx={{ mr: 2, color: 'primary.main' }} />
+                      <ListItemText
+                        primary={caisse.libelle}
+                        primaryTypographyProps={{
+                          fontWeight: 'bold',
+                          fontSize: '1.1rem'
+                        }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          ) : (
+            <Alert variant="warning" className="text-center">
+              <Info sx={{ mr: 1, verticalAlign: 'middle' }} />
+              Aucune caisse disponible pour le moment.
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
 
-        {message && (
-          <Alert variant={message.includes("succès") ? "success" : "danger"} className="mt-4">
-            {message}
-          </Alert>
-        )}
-      </div>
+      {message && (
+        <Alert variant={message.includes("succès") ? "success" : "danger"} className="mt-3">
+          {message}
+        </Alert>
+      )}
     </Container>
   );
 };

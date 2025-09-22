@@ -122,7 +122,7 @@ const AgentDashboard = () => {
                           color="success.main"
                       />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                 {/* <Grid item xs={12} sm={6} md={3}>
                       <StatCard 
                           title="Volume Transferts" 
                           value={formatCurrency(stats?.volumes.transferts.envoyes + stats?.volumes.transferts.recus)}
@@ -137,7 +137,7 @@ const AgentDashboard = () => {
                           icon={<PostAdd />}
                           color="error.main"
                       />
-                  </Grid>
+                  </Grid>*/}
               </Grid>
             )}
         </Grid>

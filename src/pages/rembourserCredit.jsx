@@ -6,6 +6,15 @@ import { useNavigate } from 'react-router-dom'; // Assuming you are using react-
 
 const RembourserCredit = () => {
   const { http, token } = useAuthUser();
+
+  // Fonction utilitaire pour formater les montants en F CFA
+  const formatCurrency = (value) => {
+    if (value === null || value === undefined) return 'N/A';
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'XOF' 
+    }).format(value);
+  };
   const [filteredCredits, setFilteredCredits] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [message, setMessage] = useState('');
@@ -43,7 +52,7 @@ const RembourserCredit = () => {
     // Utilisation de SweetAlert pour la confirmation
     Swal.fire({
       title: 'Confirmez-vous ce remboursement ?',
-      text: `Vous allez rembourser un crédit de ${credit.montant}€ à ${credit.preneur_credit.name}`,
+      text: `Vous allez rembourser un crédit de ${formatCurrency(credit.montant)} à ${credit.preneur_credit.name}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui, rembourser',
@@ -103,7 +112,7 @@ const RembourserCredit = () => {
                   <strong>Nom du preneur:</strong> {credit.preneur_credit.name} <br />
                   <strong>Nom du donneur:</strong> {credit.donneur_credit.name} <br />
                   <strong>Date du crédit:</strong> {new Date(credit.created_at).toLocaleDateString()} <br />
-                  <strong>Montant: {credit.montant} FCFA</strong>
+                  <strong>Montant: {formatCurrency(credit.montant)}</strong>
                 </div>
                 <Button variant="primary" onClick={() => handleRemboursement(credit)}>
                   Rembourser

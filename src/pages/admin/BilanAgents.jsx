@@ -506,7 +506,7 @@ const BilanAgents = () => {
                       </Typography>
                     </Box>
                     <Typography variant="body2" color="textSecondary">
-                      Bénéfices
+                      Surplus
                     </Typography>
                   </CardContent>
                 </Card>

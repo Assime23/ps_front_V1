@@ -61,7 +61,7 @@ const Retrait = () => {
 
     Swal.fire({
       title: 'Confirmez-vous ce retrait ?',
-      text: `Vous êtes sur le point de retirer ${montant} €.`,
+      text: `Vous êtes sur le point de retirer ${montant} F CFA.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui, procéder',
@@ -73,6 +73,15 @@ const Retrait = () => {
     });
   };
 
+  // Fonction utilitaire pour formater les montants en F CFA
+  const formatCurrency = (value) => {
+    if (value === null || value === undefined) return 'N/A';
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'XOF' 
+    }).format(value);
+  };
+
   const submitRetrait = async () => {
     try {
       await http.post(
@@ -80,7 +89,7 @@ const Retrait = () => {
         { montant, description },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      Swal.fire('Succès', `Retrait de ${montant} € effectué avec succès.`, 'success');
+      Swal.fire('Succès', `Retrait de ${formatCurrency(montant)} effectué avec succès.`, 'success');
       setMontant('');
       setDescription('');
       setShowModal(false);
@@ -150,7 +159,7 @@ const Retrait = () => {
                   <strong>Heure :</strong> {new Date(retrait.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                 </div>
                 <div>
-                  <strong>Montant :</strong> {parseFloat(retrait.montant_retrait).toFixed(2)} €
+                  <strong>Montant :</strong> {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(retrait.montant_retrait)}
                   <br />
                   <strong>Description :</strong> {retrait.description || 'N/A'}
                 </div>

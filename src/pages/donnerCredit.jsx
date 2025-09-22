@@ -6,6 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import CreerCreditButton from './creerCredit';
 const DonnerCredit = () => {
   const { http, token } = useAuthUser();
+
+  // Fonction utilitaire pour formater les montants en F CFA
+  const formatCurrency = (value) => {
+    if (value === null || value === undefined) return 'N/A';
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'XOF' 
+    }).format(value);
+  };
   const navigate = useNavigate();
 
   const [clients, setClients] = useState([]);
@@ -78,7 +87,7 @@ const DonnerCredit = () => {
 
     Swal.fire({
       title: 'Confirmez-vous ce crédit ?',
-      text: `Vous allez donner un crédit de ${montant} à ${selectedClient.name}`,
+      text: `Vous allez donner un crédit de ${formatCurrency(montant)} à ${selectedClient.name}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui, donner',
@@ -106,7 +115,7 @@ const DonnerCredit = () => {
         }
       );
 
-      Swal.fire('Succès', `Crédit de ${montant} donné avec succès.`, 'success').then(() => {
+      Swal.fire('Succès', `Crédit de ${formatCurrency(montant)} donné avec succès.`, 'success').then(() => {
         setMontant('');
         setDescription('');
         setSelectedClient(null);

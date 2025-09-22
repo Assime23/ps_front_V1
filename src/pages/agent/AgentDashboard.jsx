@@ -80,10 +80,7 @@ const AgentDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Mon Tableau de bord
-      </Typography>
-      
+     
       <QuickActions />
 
       <Grid container spacing={3}>

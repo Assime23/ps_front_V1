@@ -20,7 +20,8 @@
   
   z-index: 1000;
   background-color: #f8f9fa;
-  padding: 10px;
+  padding: 5px;
+  height: 30px;
 }
 
 /* Sidebar fixed on the left */
@@ -44,7 +45,7 @@
   padding: 20px;
   flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 60px; /* To ensure content doesn't overlap the footer */
+  margin-bottom: 40px; /* To ensure content doesn't overlap the footer - reduced */
 }
 
 /* When sidebar is hidden */

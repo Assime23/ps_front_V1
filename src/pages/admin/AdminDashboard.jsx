@@ -88,9 +88,7 @@ const AdminDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Tableau de bord Administrateur
-      </Typography>
+   
       <Grid container spacing={3}>
         {/* Section des filtres */}
         <Grid item xs={12}>

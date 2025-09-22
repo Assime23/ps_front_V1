@@ -78,6 +78,9 @@ const ProfilCompletAgent = () => {
   const { agentId } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
+  const authUser = useSelector((state)=> state.auth.user);
+  const isAgentSelf = !agentId && authUser?.type === 'agent';
+  const effectiveAgentId = agentId || authUser?.id || JSON.parse(localStorage.getItem('user')||'{}')?.id;
 
   const [profilData, setProfilData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -86,17 +89,17 @@ const ProfilCompletAgent = () => {
   const [filters, setFilters] = useState({ date_debut: '', date_fin: '', mois: new Date().getMonth() + 1, annee: new Date().getFullYear(), caisse_id: '' });
   const [caisses, setCaisses] = useState([]);
 
-  useEffect(() => { if (agentId){ loadProfilComplet(); loadCaisses(); }}, [agentId]);
+  useEffect(() => { if (effectiveAgentId){ loadProfilComplet(); loadCaisses(); }}, [effectiveAgentId]);
 
   const loadCaisses = async () => { try { const { data } = await apiClient.get('/getcaisse'); setCaisses(data); } catch(e){ console.error(e);} };
 
   const buildParams = (obj) => Object.entries(obj).reduce((p,[k,v])=>{ if(v!=='' && v!=null) p.append(k,v); return p; }, new URLSearchParams());
 
   const loadProfilComplet = async (custom = {}) => {
-    if(!agentId) return; setLoading(true); setError('');
+    if(!effectiveAgentId) return; setLoading(true); setError('');
     try {
       const finalFilters = { ...filters, ...custom };
-      const { data } = await apiClient.get(`/utilisateur/${agentId}/profil-complet?${buildParams(finalFilters).toString()}`);
+      const { data } = await apiClient.get(`/utilisateur/${effectiveAgentId}/profil-complet?${buildParams(finalFilters).toString()}`);
       if(data.success === false){ setError(data.message || 'Aucune donnée'); setProfilData(null);} else { setProfilData(data); }
     } catch(err){ setError(err.response?.data?.message || err.message || 'Erreur chargement profil'); setProfilData(null);} finally { setLoading(false);} };
 
@@ -243,15 +246,17 @@ const ProfilCompletAgent = () => {
     }
   ], [notesTerminees.length, tx]);
 
-  if(!agentId) return <Container maxWidth="xl" sx={{ py:3 }}><Alert severity="error">ID d'agent manquant</Alert></Container>;
+  if(!effectiveAgentId) return <Container maxWidth="xl" sx={{ py:3 }}><Alert severity="error">Impossible de déterminer l'utilisateur</Alert></Container>;
+
+  const backTarget = isAgentSelf ? '/ag/mon-bilan' : '/bilan-agents';
 
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 2, md: 3 } }}>
       <Section
         spacing={2}
-        title="Profil Complet Agent"
+        title={isAgentSelf ? 'Mon Profil Complet' : 'Profil Complet Agent'}
         actions={
-          <Button size="small" variant="outlined" startIcon={<ArrowBack />} onClick={()=>navigate('/ad/bilan-agents')}>
+          <Button size="small" variant="outlined" startIcon={<ArrowBack />} onClick={()=>navigate(backTarget)}>
             Retour
           </Button>
         }

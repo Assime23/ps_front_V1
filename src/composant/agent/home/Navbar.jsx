@@ -58,8 +58,9 @@ function NavbarAgents() {
   };
 
   const pages = [
-    { name: 'Tableau de bord', path: '/agent/dashboard' },
+    { name: 'Tableau de bord', path: '/ag/' },
     { name: 'Ma caisse', path: '/ag/ma' },
+    { name: 'Mon Bilan', path: '/ag/mon-bilan' },
     { name: 'Transactions Agents', path: '/ag/transfert-agent' },
     { name: 'Autres Transfert', path: '/ag/autres-transfert' },
     { name: 'Credit', path: '/ag/donner-credit' },
@@ -68,6 +69,7 @@ function NavbarAgents() {
 
   const settings = [
     { name: 'Profile', path: '/ag/profil' },
+    { name: 'Profil Complet', path: '/ag/mon-profil-complet' },
   ];
 
   return (

@@ -73,6 +73,8 @@ const BilanAgents = () => {
   // États pour les caisses
   const [caisses, setCaisses] = useState([]);
 
+  const isSelfAgent = user?.type === 'agent';
+
   // Charger les agents au montage du composant
   useEffect(() => {
     loadAgents();
@@ -85,6 +87,13 @@ const BilanAgents = () => {
       localStorage.removeItem('selectedAgentId'); // Nettoyer après utilisation
     }
   }, []);
+
+  // Auto-select self if agent
+  useEffect(() => {
+    if (isSelfAgent && user?.id) {
+      if (!selectedAgent) setSelectedAgent(user.id);
+    }
+  }, [isSelfAgent, user?.id]);
 
   // Charger le bilan quand un agent est sélectionné
   useEffect(() => {
@@ -249,69 +258,71 @@ const BilanAgents = () => {
       {/* En-tête */}
       <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          📊 Bilan des Agents
+          {isSelfAgent ? '📊 Mon Bilan' : '📊 Bilan des Agents'}
         </Typography>
         <Typography variant="body1" color="textSecondary">
-          Consultez les performances et bilans financiers de vos agents
+          {isSelfAgent ? 'Vue synthétique de vos performances personnelles' : 'Consultez les performances et bilans financiers de vos agents'}
         </Typography>
       </Paper>
 
-      {/* Sélection de l'agent */}
-      <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-              <InputLabel>Sélectionner un agent</InputLabel>
-              <Select
-                value={selectedAgent}
-                onChange={(e) => handleAgentChange(e.target.value)}
-                label="Sélectionner un agent"
-              >
-                <MenuItem value="">
-                  <em>Choisir un agent...</em>
-                </MenuItem>
-                {agents.map((agent) => (
-                  <MenuItem key={agent.id} value={agent.id}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Avatar sx={{ width: 24, height: 24 }}>
-                        <Person fontSize="small" />
-                      </Avatar>
-                      {agent.name} - {agent.email}
-                    </Box>
+      {/* Sélection de l'agent (cachée pour un agent) */}
+      {!isSelfAgent && (
+        <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth>
+                <InputLabel>Sélectionner un agent</InputLabel>
+                <Select
+                  value={selectedAgent}
+                  onChange={(e) => handleAgentChange(e.target.value)}
+                  label="Sélectionner un agent"
+                >
+                  <MenuItem value="">
+                    <em>Choisir un agent...</em>
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  {agents.map((agent) => (
+                    <MenuItem key={agent.id} value={agent.id}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Avatar sx={{ width: 24, height: 24 }}>
+                          <Person fontSize="small" />
+                        </Avatar>
+                        {agent.name} - {agent.email}
+                      </Box>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<Refresh />}
+                  onClick={() => selectedAgent && loadBilanAgent(selectedAgent)}
+                  disabled={!selectedAgent || loading}
+                >
+                  Actualiser
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<Person />}
+                  onClick={()=> navigate(`/ag/mon-profil-complet`)}
+                  disabled={!selectedAgent && !isSelfAgent}
+                >
+                  Profil Complet
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<Download />}
+                  disabled={!bilanData}
+                >
+                  Exporter
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button
-                variant="outlined"
-                startIcon={<Refresh />}
-                onClick={() => selectedAgent && loadBilanAgent(selectedAgent)}
-                disabled={!selectedAgent || loading}
-              >
-                Actualiser
-              </Button>
-              <Button
-                variant="contained"
-                startIcon={<Person />}
-                onClick={() => navigate(`/ad/profil-agent/${selectedAgent}`)}
-                disabled={!selectedAgent}
-              >
-                Profil Complet
-              </Button>
-              <Button
-                variant="contained"
-                startIcon={<Download />}
-                disabled={!bilanData}
-              >
-                Exporter
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      )}
 
       {/* Filtres */}
       {selectedAgent && (
@@ -528,16 +539,48 @@ const BilanAgents = () => {
 
           {/* Détail des notes */}
           <Paper elevation={1} sx={{ p: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h5">
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap:'wrap', gap:1 }}>
+              <Typography variant="h5" sx={{ mr:2 }}>
                 📋 Détail des Notes
               </Typography>
-              {bilanData.pagination && (
-                <Chip 
-                  label={`${bilanData.pagination.notes_sur_cette_page} sur ${bilanData.pagination.total_notes} notes`}
-                  variant="outlined"
-                />
-              )}
+              <Box sx={{ display:'flex', alignItems:'center', gap:1, flexWrap:'wrap', ml:'auto' }}>
+                {bilanData.pagination && (
+                  <Chip 
+                    label={`${bilanData.pagination.notes_sur_cette_page} / ${bilanData.pagination.total_notes}`}
+                    variant="outlined"
+                    size="small"
+                  />
+                )}
+                {isSelfAgent && (
+                  <Box sx={{ display:'flex', gap:1, flexWrap:'wrap' }}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<Refresh />}
+                      onClick={()=> loadBilanAgent(user.id)}
+                      disabled={loading}
+                    >
+                      Actualiser
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<Person />}
+                      onClick={()=> navigate('/ag/mon-profil-complet')}
+                    >
+                      Profil Complet
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<Download />}
+                      disabled={!bilanData}
+                    >
+                      Exporter
+                    </Button>
+                  </Box>
+                )}
+              </Box>
             </Box>
             
             {bilanData.bilans_notes && bilanData.bilans_notes.length > 0 ? (
@@ -638,15 +681,11 @@ const BilanAgents = () => {
       )}
 
       {/* Message si aucun agent sélectionné */}
-      {!selectedAgent && (
+      {!isSelfAgent && !selectedAgent && (
         <Paper elevation={1} sx={{ p: 6, textAlign: 'center' }}>
           <Person sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-          <Typography variant="h5" color="textSecondary" gutterBottom>
-            Sélectionnez un agent
-          </Typography>
-          <Typography variant="body1" color="textSecondary">
-            Choisissez un agent dans la liste pour consulter son bilan financier
-          </Typography>
+          <Typography variant="h5" color="textSecondary" gutterBottom>Sélectionnez un agent</Typography>
+          <Typography variant="body1" color="textSecondary">Choisissez un agent dans la liste pour consulter son bilan financier</Typography>
         </Paper>
       )}
     </Container>

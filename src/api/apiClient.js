@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Configuration de base pour l'API
 const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'https://api1.psmyservices.com', //'http://127.0.0.1:8000/api',
   headers: {
     'Content-Type': 'application/json',
   },

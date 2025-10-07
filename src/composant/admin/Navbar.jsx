@@ -95,7 +95,6 @@ function NavbarAgents() {
               fontSize: '1rem',
             }}
           >
-            {libelleCaisse ? ` ${libelleCaisse}` : 'Aucune caisse sélectionnée'}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -198,9 +197,7 @@ function NavbarAgents() {
                   </Link>
                 </MenuItem>
               ))}
-              <MenuItem key="descendreCaisse" onClick={handleCloseUserMenu}>
-                <DescendreCaisseButton setLibelleCaisse={setLibelleCaisse} />
-              </MenuItem>
+             
               <MenuItem key="logout" onClick={handleCloseUserMenu}>
                 <LogoutButton />
               </MenuItem>

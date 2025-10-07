@@ -202,6 +202,8 @@ const CaisseCrud = () => {
                     <option value="1xbet">1xbet</option>
                     <option value="betwinner">BetWinner</option>
                     <option value="meltbet">Meltbet</option>
+                    <option value="88start">88start</option>
+
 
                   </Form.Select>
                 </Form.Group>
